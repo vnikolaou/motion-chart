@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>College of education</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/blog-home.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<script src="js/d3.min.js"></script>
+	
+    <style>
+        .axis path, line{
+            fill: none;
+            stroke: rgb(204, 204, 204);
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-size: 14px;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
+        }
+
+        .area {
+            fill: #ddd;
+            stroke: rgb(204, 204, 204);
+            stroke-width: 1;
+        }
+
+    </style>	
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">College of Education</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+				<!--
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Services</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+					-->
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <!-- Compare By Well -->
+                <div class="well">
+						<div class="form-group">
+						  <label for="sel1">Compare by:</label>
+						  <select class="form-control" id="compareby">
+						    <option value="0">College Program</option>
+						  </select>
+						</div>						
+                </div>
+
+                <!-- Program Well -->
+                <div class="well">
+						<div class="form-group">
+						  <label for="sel1">Select <span id="program_cur">College Program</span>:</label>
+						  <select class="form-control" id="program_val">
+						  </select>
+						</div>	
+
+						<p id="subprograms_box">
+						<!--
+							<div class="checkbox">
+							  <label><input type="checkbox" value="">Option 1</label>
+							</div>
+							<div class="checkbox">
+							  <label><input type="checkbox" value="">Option 2</label>
+							</div>
+							<div class="checkbox disabled">
+							  <label><input type="checkbox" value="" disabled>Option 3</label>
+							</div>	
+-->							
+						</p>
+                </div>		
+
+					
+                <!-- Program Type Well -->
+                <div class="well">
+						<div class="form-group">
+						  <label for="sel1">Program Type:</label>
+						  <select class="form-control" id="type">
+						  </select>
+						</div>						
+                </div>
+				
+                <!-- Student Learning Outcomes -->
+                <div class="well">
+						<div class="form-group">
+						  <label for="sel1">Outcome (SLO):</label>
+						  <select class="form-control" id="outcome">
+						  </select>
+						</div>						
+                </div>
+				
+               
+            </div>
+			
+            <!-- Blog Entries Column -->
+            <div class="col-md-9">
+
+<!--
+                <h1 class="page-header">
+                    Page Heading
+                    <small>Secondary Text</small>
+                </h1>
+
+                <h2>
+                    <a href="#">Blog Post Title</a>
+                </h2>
+                <p class="lead">
+                    by <a href="index.php">Start Bootstrap</a>
+                </p>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
+                <hr>
+                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
+                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+                <hr>
+
+                <ul class="pager">
+                    <li class="previous">
+                        <a href="#">&larr; Older</a>
+                    </li>
+                    <li class="next">
+                        <a href="#">Newer &rarr;</a>
+                    </li>
+                </ul>
+				-->
+				
+				
+
+<!-- Chart Container -->
+
+
+<div id="chart01" class="chart-example"></div>
+
+
+
+
+<script>
+    function areaChart1() {
+
+        // Chart Attributes
+        var width = 850,
+            height = 500,
+            margin = {top: 20, right: 20, bottom: 20, left: 50};
+
+        // Time format
+        var timeFormat = '%d-%b-%y';
+
+        // Chart Creation
+        function chart(selection) {
+            selection.each(function(data) {
+
+                // Select the container element and create the svg selection
+                var div = d3.select(this),
+					svg = div.selectAll('svg').data([data]);
+		
+                // Initialize the svg element
+                svg.enter().append('svg')
+                    .call(svgInit);
+
+                // Initialize the svg element
+                svg
+                    .attr('width', width)
+                    .attr('height', height);
+
+                // Configure the time parser
+                var parseDate = d3.time.format(timeFormat).parse;
+			//	var formatPercent = d3.format("");
+				
+                // Parse the data
+                data.forEach(function(d) {
+                  //  d.date = +d.date; //parseDate(d.date);
+					d.direct = +d.direct;
+                  //  d.close = +d.close;
+                });
+
+                // Create the scales and axis
+                var xScale = d3.scale.linear()
+                    .domain([0, 
+						d3.max(data, function(d) { 
+							console.log("i=" + d.direct);
+							return d.direct; 
+						}
+					)])					
+                    .range([0, width - margin.left - margin.right]);
+
+                // Create the x axis
+                var xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient('bottom')
+					.innerTickSize(-height)
+					.outerTickSize(0)
+					.tickPadding(10);					
+					//.tickFormat(formatPercent);
+
+                // Invoke the xAxis function on the corresponding group
+                svg.select('g.xaxis').call(xAxis);
+
+                // Y Axis and Scale
+                var yScale = d3.scale.linear()
+                    .domain([0, 
+						d3.max(data, function(d) { 
+							console.log("i=" + d.indirect);
+							return d.indirect; 
+						}
+					)])
+                    .range([height - margin.top - margin.bottom, 0]);
+
+                var yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient('left')
+					.innerTickSize(-width)
+					.outerTickSize(0)
+					.tickPadding(10);					
+
+                // Invoke the yAxis function of the y axis
+                svg.select('g.yaxis').call(yAxis);
+
+                // Chart Content
+				svg.selectAll("line.l1").remove();
+				svg.selectAll("circle.c1").remove();
+				
+                // Create and configure the area generator
+                var area = d3.svg.area()
+                    .x(function(d) { return xScale(d.date); })
+                    .y0(height - margin.top - margin.bottom)
+                    .y1(function(d) { return yScale(d.close); });
+
+					
+				// Define the line
+				var valueline = d3.svg.line()
+					.x(function(d) { return xScale(d.direct); })
+					.y(function(d) { return yScale(d.indirect); });
+		 
+                // Create the area path
+				
+		
+                svg.selectAll('g.chart')
+					.data(data)
+					.enter()
+					.append('line')
+					.attr('class', 'l1')
+					.attr("x1", function(d,i) { return xScale(d.direct); })
+					.attr("y1", function(d,i) { return yScale(d.indirect); })
+					.attr("x2", function(d,i) { return xScale(d.direct) + 20; })
+					.attr("y2", function(d,i) { return yScale(d.indirect) + 20; })				
+				
+					
+				// Add the scatterplot
+				svg.selectAll('g.chart')
+					.data(data)
+					.enter()
+					.append("circle")
+					.attr('class', 'c1')
+					.attr("r", 3.5)
+					.attr("cx", function(d) { return xScale(d.direct); })
+					.attr("cy", function(d) { return yScale(d.indirect); });					
+            });
+        }
+
+        // Chart Initialization
+        var svgInit = function(selection) {
+            selection.each(function(data) {
+
+                // Select the svg element
+                var svg = d3.select(this);
+
+
+
+                // Create and transform the x axis group
+                svg.append('g')
+                    .attr('class', 'xaxis axis')
+                    .attr('transform', function() {
+                        var dx = margin.left,
+                            dy = height - margin.top;
+                        return 'translate(' + [dx, dy] + ')';
+                    });
+
+                // Create and transform the y axis group
+                svg.append('g')
+                    .attr('class', 'yaxis axis')
+                    .attr('transform', function() {
+                        var dx = margin.left,
+                            dy = margin.top;
+
+                        return 'translate(' + [dx, dy] + ')';
+                    });
+					
+                svg.append('g')
+                    .attr('class', 'chart')
+                    .attr('transform', function() {
+                        var dx = margin.left,
+                            dy = margin.top;
+                        return 'translate(' + [dx, dy] + ')';
+                    });					
+					
+            });
+        };
+
+        // Accessors Methods
+
+        // Width Accessor
+        chart.width = function(w) {
+            if (!arguments.length) { return width; }
+            width = w;
+            return chart;
+        };
+
+        // Height Accessor
+        chart.height = function(h) {
+            if (!arguments.length) { return height; }
+            height = h;
+            return chart;
+        };
+
+        // Margin Accessor
+        chart.margin = function(m) {
+            if (!arguments.length) { return margin; }
+            margin = m;
+            return chart;
+        };
+
+        // Time Format Accessor
+        chart.timeFormat = function(fmt) {
+            if (!arguments.length) { return timeFormat; }
+            timeFormat = fmt;
+            return chart;
+        };
+
+        return chart;
+    }
+</script>
+
+
+
+<script>
+
+    // Load the TSV Stock Data
+    d3.csv('http://localhost:8080/data/assessment_data.csv', function(error, data) {
+
+        // Handle errors getting or parsing the data
+        if (error) {
+            console.error(error);
+            throw error;
+        }
+
+		var categories = [];
+		var slos = [];
+		var programs = [];
+		var dates = [];
+		var axis_data = {};
+		
+		for(var i=0;i<data.length;i++) {
+			var el = data[i];
+			
+			var pp = programs.indexOf(el.program);	
+			if(pp == -1) {
+				programs.push(el.program);
+				pp = programs.length - 1;
+				if(pp == 0) {  // this assumes that credential programs is in the first position and parent 
+					$('<option>').val(pp).text(el.program).appendTo('#program_val');
+				} else {
+					var label = $("<label>");
+					$("<input type='checkbox' id='pid' name='pid'>").val(pp).appendTo(label);
+					$("<span>").text(el.program).appendTo(label);
+					
+					var div = $("<div class='checkbox'>");
+					
+					label.appendTo(div);
+					div.appendTo('#subprograms_box');
+		
+				}	
+			}	
+
+			var cp = categories.indexOf(el.programs);	
+			if(cp == -1) {
+				categories.push(el.programs);	
+				cp = categories.length - 1;
+				$('<option>').val(cp).text(el.programs).appendTo('#type');
+			}
+			
+			var sp = slos.indexOf(el.slos);	
+			if(sp == -1) {
+				slos.push(el.slos);
+				sp = slos.length - 1;
+				$('<option>').val(sp).text(el.slos).appendTo('#outcome');
+			}	
+
+			var dp = dates.indexOf(el.date);
+			if(dp == -1) {
+				dates.push(el.date);
+				dp = dates.length - 1;
+			}	
+			
+			var ar = axis_data[cp + ',' + sp + ',' + pp];
+			if(ar == undefined) {
+				ar = [];
+				axis_data[cp + ',' + sp + ',' + pp] = ar;
+			}	
+			ar.push({'date': el.date, 'direct': el.direct, 'indirect': el.indirect});
+		}
+		
+
+		$("#type").bind("change", function() {
+			console.log( "Handler for type.click() called." );
+			draw();
+		});
+
+		$("#outcome").bind("change", function() {
+			console.log( "Handler for outcome.click() called." );
+			draw();
+		});
+		
+		  // Create and configure the area chart
+			var chart = areaChart1();
+			// Bind the chart to the container div
+			d3.select('div#chart01')
+				.datum([])
+				.call(chart);
+				
+		var draw = function() {
+			var cp = $("#type").val();
+			var sp = $("#outcome").val();
+			var pp = [];
+			$("input[name=pid]").each(function() {
+				console.log(this.checked);
+				if(this.checked) {
+					pp.push($(this).val());
+				}	
+			});
+			console.log("cp=" + cp + ",sp=" + sp+ ",pp=" + pp);
+			
+			var res = [];
+			for(var i=0;i<pp.length;i++) {
+				var ar = axis_data[cp + ',' + sp + ',' + pp[i]];
+				for(var j=0;j<ar.length;j++) {
+					res.push(ar[j]);
+					console.log("date=" + ar[j].date + ",direct=" + ar[j].direct + ",indirect=" + ar[j].indirect);
+				}				
+			}
+			
+			// Bind the chart to the container div
+			d3.select('div#chart01')
+				.datum(res)
+				.call(chart);
+		}
+		
+
+    });
+</script>				
+				
+				
+				
+				
+				
+				
+				
+            </div>
+
+            <!-- Blog Sidebar Widgets Column -->
+
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
