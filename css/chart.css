@@ -1,0 +1,10 @@
+line{
+    fill: none;
+    stroke: rgb(204, 204, 204);
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 14px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
+}

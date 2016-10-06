@@ -16,39 +16,20 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/blog-home.css" rel="stylesheet">
-
+    <link href="css/site.css" rel="stylesheet">
+	<link href="css/chart.css" rel="stylesheet">
+	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<script src="js/d3.min.js"></script>
-	
-    <style>
-        .axis path, line{
-            fill: none;
-            stroke: rgb(204, 204, 204);
-            shape-rendering: crispEdges;
-        }
-
-        .axis text {
-            font-size: 14px;
-			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
-        }
-
-        .area {
-            fill: #ddd;
-            stroke: rgb(204, 204, 204);
-            stroke-width: 1;
-        }
-
-    </style>	
+	<script src="js/d3.min.js"></script>	
+	<script src="js/chart.js"></script>	
 </head>
 
 <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -82,14 +63,10 @@
         </div>
         <!-- /.container -->
     </nav>
-
     <!-- Page Content -->
     <div class="container">
-
         <div class="row">
-
             <div class="col-md-3">
-
                 <!-- Compare By Well -->
                 <div class="well">
 						<div class="form-group">
@@ -99,7 +76,6 @@
 						  </select>
 						</div>						
                 </div>
-
                 <!-- Program Well -->
                 <div class="well">
 						<div class="form-group">
@@ -107,7 +83,6 @@
 						  <select class="form-control" id="program_val">
 						  </select>
 						</div>	
-
 						<p id="subprograms_box">
 						<!--
 							<div class="checkbox">
@@ -121,9 +96,7 @@
 							</div>	
 -->							
 						</p>
-                </div>		
-
-					
+                </div>			
                 <!-- Program Type Well -->
                 <div class="well">
 						<div class="form-group">
@@ -132,7 +105,6 @@
 						  </select>
 						</div>						
                 </div>
-				
                 <!-- Student Learning Outcomes -->
                 <div class="well">
 						<div class="form-group">
@@ -141,639 +113,195 @@
 						  </select>
 						</div>						
                 </div>
-				
-               
             </div>
 			
-            <!-- Blog Entries Column -->
+            <!-- Chart Column -->
             <div class="col-md-9">
 
-<!--
-                <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
+				<!-- Chart Container -->
+				<div id="chart01"></div>
+				<div id="chart02"></div>
 
-                <h2>
-                    <a href="#">Blog Post Title</a>
-                </h2>
-                <p class="lead">
-                    by <a href="index.php">Start Bootstrap</a>
-                </p>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
-                <hr>
-                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-                <hr>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-
-                <hr>
-
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
-				-->
-				
-				
-
-<!-- Chart Container -->
-
-
-<div id="chart01" class="chart-example"></div>
-<div id="chart02" ></div>
-
-
-
-<script>
-    function MotionChart() {
-        /// Chart Attributes
-        var width = 850,
-            height = 600,
-            margin = {top: 50, right: 50, bottom: 50, left: 50};
-			minX = 0, maxX = 0;
-			minY = 0, maxY = 0;
-			
-        /// Chart Creation
-        function chart(selection) {
-            selection.each(function(data) {
-                // Select the container element and create the svg selection
-                var div = d3.select(this),
-					svg = div.selectAll('svg').data([data]);
-		
-                // Initialize the svg element
-                svg.enter().append('svg')
-                    .call(init);
-
-                // Initialize the svg element
-                svg.attr('width', width)
-                   .attr('height', height);
-
-                // Parse the data
-                data.forEach(function(d) {
-					d.forEach(function(d0) {
-						d0.direct = +d0.direct;
-						d0.indirect = +d0.indirect;
-					});	
-                });
-
-                // Create the scales and axis
-                var xScale = d3.scale.linear()
-                    .domain([minX, maxX])					
-                    .range([0, width - margin.left - margin.right]);
-
-                // Create the x axis
-                var xAxis = d3.svg.axis()
-                    .scale(xScale)
-                    .orient('bottom')
-					.ticks(20)
-					.innerTickSize(-height)
-					.outerTickSize(0)
-					.tickPadding(10);						
-  
-                // Invoke the xAxis function on the corresponding group
-                var xax = svg.select('g.xaxis').call(xAxis);
-				
-                // Y Axis and Scale
-                var yScale = d3.scale.linear()
-                    .domain([minY, maxY])
-                    .range([height - margin.top - margin.bottom, 0]);
-
-                var yAxis = d3.svg.axis()
-                    .scale(yScale)
-					.ticks(20)
-                    .orient('left')
-					.innerTickSize(-width)
-					.outerTickSize(0)
-					.tickPadding(10);					
-
-                // Invoke the yAxis function of the y axis
-                var yax = svg.select('g.yaxis').call(yAxis);
-				
-				// now add titles to the axes
-				svg.selectAll("#lxax").remove();
-				svg.selectAll("#lyax").remove();	
-
-				xax.append("text")
-					.attr("id", "lxax")
-					.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-					.attr("transform", "translate("+ (width/2) +","+(margin.bottom-10)+")")  // centre below axis
-					.text("Direct Measure - " + $("#type option:selected").text() + " - " + $("#outcome option:selected").text());				
-
-				
-				yax.append("text")
-					.attr("id", "lyax")				
-					.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-					.attr("transform", "translate(-"+ (margin.left-10) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-					.text("Indirect Measure - " + $("#type option:selected").text() + " - " + $("#outcome option:selected").text());
+				<script>
+					// Target URL for loading data (this normally should be dynamic)
+					var url = 'http://localhost:8080/data/assessment_data.csv';
 					
-				if(data && data.length > 0) {
-					// Chart Content
-					svg.selectAll("g.cg").remove();
-	
-					var line = d3.svg.line()
-					 .x( function(point) { return point.lx; })
-					 .y( function(point) { return point.ly; });
-					 
-					// Render all the data series
-					var cGroup = svg.select('g.chart');
-					
-					for(var k=0; k<data.length; k++) {
-						console.log('adding data series:'+k);
-						var cg = cGroup.append('g') // create inner group for the specific data series
-							.attr('class', 'cg')
-							.attr('transform', 'translate(0,0)');	
-							
-						var series = data[k];
+					// Load the TSV Stock Data
+					d3.csv(url, function(error, data) {
+						// Handle errors getting or parsing the data
+						if (error) {
+							console.error(error);
+							throw error;
+						}
 						
-						cg.selectAll("circle") // render into the inner group the circles
-							.data(series)
-							.enter()
-							.append("circle")
-							.style("fill", k%2?"blue":"purple")
-							.attr('class', 'c1')
-							.attr("r", 5)
-							.attr("cx", function(d) { return xScale(d.direct);  })
-							.attr("cy", function(d) { return yScale(d.indirect); })
-							.on('click', function(d){ console.log(d.direct + ',' + d.indirect);  })
-							.each(function (d, i) {
+						// Setup mix, max range values for axes
+						var minX = d3.min(data, function(d) { return +d.direct; });
+						var maxX = d3.max(data, function(d) { return +d.direct; });
+						var minY = d3.min(data, function(d) { return +d.indirect; });					
+						var maxY = d3.max(data, function(d) { return +d.indirect; });
+						
+						// Will hold the core grouped data items after initial processing of raw data
+						var categories = [];
+						var slos = [];
+						var programs = [];
+						var dates = [];
+						var axis_data = {};
+
+						// Processing raw data 
+						for(var i=0;i<data.length;i++) {
+							var el = data[i];
+							
+							// Setup sub-categories for "college program" select box
+							var pp = programs.indexOf(el.program);	
+							if(pp == -1) {
+								programs.push(el.program);
+								pp = programs.length - 1;
+								if(pp == 0) {  // this assumes that credential programs is in the first position and parent 
+									$('<option>').val(pp).text(el.program).appendTo('#program_val');
+								} else {
+									var label = $("<label>");
+									$("<input type='checkbox' id='pid' name='pid'>").val(pp).appendTo(label);
+									$("<span>").text(el.program).appendTo(label);
+									
+									var div = $("<div class='checkbox'>");
+									
+									label.appendTo(div);
+									div.appendTo('#subprograms_box');
+						
+								}	
+							}	
+
+							// Setup options for "program type" select box
+							var cp = categories.indexOf(el.programs);	
+							if(cp == -1) {
+								categories.push(el.programs);	
+								cp = categories.length - 1;
+								$('<option>').val(cp).text(el.programs).appendTo('#type');
+							}
+							
+							// Setup options for "outcome (slo)" select box
+							var sp = slos.indexOf(el.slos);	
+							if(sp == -1) {
+								slos.push(el.slos);
+								sp = slos.length - 1;
+								$('<option>').val(sp).text(el.slos).appendTo('#outcome');
+							}	
+
+							// Fill in the "dates" array with the distinct dates
+							var cmp = el.date.split('.');
+							var val = (parseInt(cmp[0]) * 12) + parseInt(cmp[1]);			
+							var dp = dates.indexOf(val);
+							if(dp == -1) {
+								dates.push(val);
+								dp = dates.length - 1;
+							}	
+							
+							// Fill in the axis_data object/map with distinct key/value pairs (composes the core source of data items for the chart)
+							var ar = axis_data[cp + ',' + sp + ',' + pp];
+							if(ar == undefined) {
+								ar = [];
+								axis_data[cp + ',' + sp + ',' + pp] = ar;
+							}	
+							ar.push({'date': el.date, 'direct': el.direct, 'indirect': el.indirect, 'n': el.N, 'pp': pp});
+						}
+
+						// JQuey "onchange" handlers; they just re-draw the chart when another option is selected
+						$("#type").bind("change", function() { draw(); });
+						$("#outcome").bind("change", function() { draw(); });
+						$("input[name=pid]").bind("change", function() { draw(); });		
+						 
+						 
+						// Create and configure the multi-series chart
+						var chart = MultiSeriesChart();
+						
+						// setup min/max values for x,y axes
+						chart.minX(minX);			  
+						chart.maxX(maxX);
+						chart.minY(minY);			
+						chart.maxY(maxY);
+							
+						// Bind the chart to the container div (it just initiates th chart with no data)
+						d3.select('div#chart01')
+							.datum([])
+							.call(chart);
+						
+
+						// Create and configure the slider control
+						var swidth = 785,
+							sheight = 40,
+							smargin = 50;
+
+						var svg0 = d3.select('#chart02').append('svg')
+							.attr('width', swidth + 2 * smargin)
+							.attr('height', sheight + 2 * smargin);
+
+						var svalue = dates[0],
+							sdomain = [dates[0], dates[dates.length-1] + 1];
+							
+						var slider = SliderControl()
+							.width(swidth)
+							.domain(sdomain);
 								
-								if (i === series.length-1) {
-								  // put all your operations on the second element, e.g.
-								  d3.select(this).style("fill", k%2?"red":"yellow");
-								}
-								if(i > 0) {
-									cg.append("line")          // attach a line
-										.style("stroke", "black")  // colour the line
-										.style("stroke-width", "1")  // colour the line
-										.attr('class', 'cli')
-										.attr("x1", xScale(series[i-1].direct))     // x position of the first end of the line
-										.attr("y1", yScale(series[i-1].indirect))      // y position of the first end of the line
-										.attr("x2", xScale(series[i].direct))     // x position of the second end of the line
-										.attr("y2", yScale(series[i].indirect));    // y position of the second end of the line						
-								}
+						slider.currentValue(svalue);
+							
+						slider.onSlide(function(selection) {
+							selection.each(function(d) {
+								slider.currentValue(d);
+								draw(); // onSlide event re-draw the chart
 							});
-					   }
-				   }				   
-            });
-        }
+						});
+						
+						svg0.selectAll('g')
+							.data([svalue])
+							.enter()
+							.append('g')
+							.attr('transform', 'translate(' + [smargin, sheight / 2] + ')')
+							.call(slider);	
 
-        // Chart Initialization
-        var init = function(selection) {
-            selection.each(function(data) {
+							
+						// The main draw function that is called when several events occur (over select boxes and slider)
+						function draw() {
+							var cp = $("#type").val();
+							var sp = $("#outcome").val();
+							var pp = [];
+							
+							$("input[name=pid]").each(function() {
+								if(this.checked) {
+									pp.push($(this).val());
+								}	
+							});
 
-                // Select the svg element
-                var svg = d3.select(this);
-
-                // Create and transform the x axis group
-                svg.append('g')
-                    .attr('class', 'xaxis axis')
-                    .attr('transform', function() {
-                        var dx = margin.left,
-                            dy = height - margin.top;
-                        return 'translate(' + [dx, dy] + ')';
-                    });
-
-                // Create and transform the y axis group
-                svg.append('g')
-                    .attr('class', 'yaxis axis')
-                    .attr('transform', function() {
-                        var dx = margin.left,
-                            dy = margin.top;
-
-                        return 'translate(' + [dx, dy] + ')';
-                    });
+							var res = [];
+							
+							for(var i=0;i<pp.length;i++) {
+								var ar = axis_data[cp + ',' + sp + ',' + pp[i]];
+								var pos = -1;
+								for(var j=0;j<ar.length;j++) {
+									if(slider.currentValue() == ar[j].date) {
+										pos = j;
+										break;
+									} 
+								}
+								
+								if(pos > -1) {
+								   var res0 = [];
+								   for(var k=0;k<=pos;k++) {
+									  res0.push(ar[k]);
+								   }
+								   res.push(res0);
+								}
+							}
+						
+							// Re-bind the chart to its container div in order to render the new set of data		
+							d3.select('div#chart01')
+								.datum(res)
+								.call(chart);
+						}	
+					});
 					
-                svg.append('g')
-                    .attr('class', 'chart')
-                    .attr('transform', function() {
-                        var dx = margin.left,
-                            dy = margin.top;
-                        return 'translate(' + [dx, dy] + ')';
-                    });					
-					
-            });
-        };
-
-        /// Accessors Methods
-
-        /// Width Accessor
-        chart.width = function(w) {
-            if (!arguments.length) { return width; }
-            width = w;
-            return chart;
-        };
-
-        /// Height Accessor
-        chart.height = function(h) {
-            if (!arguments.length) { return height; }
-            height = h;
-            return chart;
-        };
-
-        /// Range Value Accessors
-        chart.minX = function(x) {
-            if (!arguments.length) { return minX; }
-            minX = x;
-            return chart;
-        };		
-        chart.maxX = function(x) {
-            if (!arguments.length) { return maxX; }
-            maxX = x;
-            return chart;
-        };
-        chart.minY = function(y) {
-            if (!arguments.length) { return minY; }
-            minY = y;
-            return chart;
-        };		
-        chart.maxY = function(y) {
-            if (!arguments.length) { return maxY; }
-            maxY = y;
-            return chart;
-        };
-		
-        return chart;
-    }
-	
-	function sliderControl() {
-			// default values
-		var width = 600;
-		var domain = [0, 100];
-		var onSlide = function(selection) { };	
-		var label = '';
-		var value;
-		
-		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-		// Charting function.
-		function chart(selection) {
-			selection.each(function(data) {	
-				console.log("data:" + data);
-	
-				// Select the container group.
-				var group = d3.select(this); 
-				
-				// Add a line covering the complete width.
-				group.selectAll('line')
-					.data([data])
-					.enter()
-					.append('line')
-					.call(chart.initLine);
-					
-                // Append a circle as handler.
-                var handle = group.selectAll('circle')
-                    .data([data])
-                    .enter().append('circle')
-                    .call(chart.initHandle);	
-					
-				group.append('text')
-					.attr("id", "slbl")
-					.attr("x", function(d) { return -10; })
-					.attr("y", 25)
-					.attr("dy", ".35em")
-					.text(function(d) { return label; });
-	
-                // Set the position scale.
-                var posScale = d3.scale.linear()
-                    .domain(domain)
-                    .range([0, width]);
-
-
-                // Set the position of the circle and adds the drag behavior.
-                handle.attr('cx', function(d) { 
-					var r = posScale(d); 
-					console.log('r=' + r + ', d=' + d);
-					return r;
-				});
-
-                // Create and configure the drag behavior.
-                var drag = d3.behavior.drag()
-                    .on('drag', moveHandle);
-
-                handle.call(drag);
-
-                function moveHandle(d) {
-                    // Compute the future position of the handle
-                    var cx = +d3.select(this).attr('cx') + d3.event.dx;
-
-                    // Update the position if its within its valid range.
-                    if ((0 < cx) && (cx < width)) {
-						//console.log('cx=' + cx);
-                        // Compute the new value and rebind the data
-                        d3.select(this)
-                            .data([posScale.invert(cx)])
-                            .attr('cx', cx)
-                            .call(onSlide);
-						d3.selectAll('#slbl').attr('x', cx-10);		
-                    }
-					
-                }
-				
-			});
-		}
-
-        // Set the initial attributes of the line.
-		chart.initLine = function(selection) {
-            selection
-                .attr('x1', 2)
-                .attr('x2', width - 4)
-                .attr('stroke', '#777')
-                .attr('stroke-width', 4)
-                .attr('stroke-linecap', 'round');
-		}
-
-        // Set the initial attributes of the handle.
-        chart.initHandle = function(selection) {
-            selection
-                .attr('cx', function(d) { return width / 2; })
-                .attr('r', 6)
-                .attr('fill', '#aaa')
-                .attr('stroke', '#222')
-                .attr('stroke-width', 2);
-        };
-		
-		// accessors
-		chart.width = function(value) {
-			if(!arguments.length) { return width; }
-			width = value;
-			return chart;
-		};
-		
-		chart.domain = function(value) {
-			if(!arguments.length) { return domain; }
-			domain = value;
-			return chart;		
-		};
-		
-        chart.onSlide = function(onSlideFunction) {
-            if (!arguments.length) { return onSlide; }
-            onSlide = onSlideFunction;
-            return chart;
-        };
-		
-        chart.currentValue = function(val) {
-            if (!arguments.length) { return value; }
-			var v = parseInt(val);
-			var y = Math.floor(v / 12);
-			var m = v % 12;
-			if(m == 0) {
-				y--;
-				m = 12;
-			}
-			
-			value = y + '.' + d3.format("02")(m);
-            label = months[m-1] + ' ' + y;
-			console.log("setting=" + label + ", v=" + value);
-			
-			d3.selectAll('#slbl').text(label);
-            return chart;
-        };
-		
-		return chart;			
-	}	
-</script>
-
-
-
-<script>
-
-    // Load the TSV Stock Data
-    d3.csv('http://localhost:8080/data/assessment_data.csv', function(error, data) {
-
-        // Handle errors getting or parsing the data
-        if (error) {
-            console.error(error);
-            throw error;
-        }
-
-		var categories = [];
-		var slos = [];
-		var programs = [];
-		var dates = [];
-		var axis_data = {};
-		
-		var minX = d3.min(data, function(d) { 
-						//	console.log("i=" + d.indirect);
-							return +d.direct; 
-						}
-					);
-					
-		var maxX = d3.max(data, function(d) { 
-						//	console.log("i=" + d.indirect);
-							return +d.direct; 
-						}
-					);
-		var minY = d3.min(data, function(d) { 
-						//	console.log("i=" + d.indirect);
-							return +d.indirect; 
-						}
-					);					
-		var maxY = d3.max(data, function(d) { 
-						//	console.log("i=" + d.indirect);
-							return +d.indirect; 
-						}
-					);
-					
-		for(var i=0;i<data.length;i++) {
-			var el = data[i];
-
-			var pp = programs.indexOf(el.program);	
-			if(pp == -1) {
-				programs.push(el.program);
-				pp = programs.length - 1;
-				if(pp == 0) {  // this assumes that credential programs is in the first position and parent 
-					$('<option>').val(pp).text(el.program).appendTo('#program_val');
-				} else {
-					var label = $("<label>");
-					$("<input type='checkbox' id='pid' name='pid'>").val(pp).appendTo(label);
-					$("<span>").text(el.program).appendTo(label);
-					
-					var div = $("<div class='checkbox'>");
-					
-					label.appendTo(div);
-					div.appendTo('#subprograms_box');
-		
-				}	
-			}	
-
-			var cp = categories.indexOf(el.programs);	
-			if(cp == -1) {
-				categories.push(el.programs);	
-				cp = categories.length - 1;
-				$('<option>').val(cp).text(el.programs).appendTo('#type');
-			}
-			
-			var sp = slos.indexOf(el.slos);	
-			if(sp == -1) {
-				slos.push(el.slos);
-				sp = slos.length - 1;
-				$('<option>').val(sp).text(el.slos).appendTo('#outcome');
-			}	
-
-			var cmp = el.date.split('.');
-			var val = (parseInt(cmp[0]) * 12) + parseInt(cmp[1]);			
-			var dp = dates.indexOf(val);
-			if(dp == -1) {
-				console.log(el.date + '=' + val);
-				dates.push(val);
-				dp = dates.length - 1;
-			}	
-			
-			var ar = axis_data[cp + ',' + sp + ',' + pp];
-			if(ar == undefined) {
-				ar = [];
-				axis_data[cp + ',' + sp + ',' + pp] = ar;
-			}	
-
-			ar.push({'date': el.date, 'direct': el.direct, 'indirect': el.indirect});
-		}
-		//console.log('diff= ' + (dates[dates.length-1] - dates[0]));
-
-		$("#type").bind("change", function() {
-			console.log( "Handler for type.click() called." );
-			draw();
-		});
-
-		$("#outcome").bind("change", function() {
-			console.log( "Handler for outcome.click() called." );
-			draw();
-		});
-		
-		$("input[name=pid]").bind("change", function() {
-			console.log( "Handler for pid.click() called." );
-			draw();
-		});		
-		 
-		 
-		  // Create and configure the area chart
-			var chart = MotionChart();
-			chart.minX(minX);			  
-			chart.maxX(maxX);
-			chart.minY(minY);			
-			chart.maxY(maxY);
-			
-			// Bind the chart to the container div
-			d3.select('div#chart01')
-				.datum([])
-				.call(chart);
-		
-
-		
-		// Figure properties.
-		var swidth = 785,
-			sheight = 40,
-			smargin = 50;
-
-		// Create the svg element and set its dimensions.
-		var svg0 = d3.select('#chart02').append('svg')
-			.attr('width', swidth + 2 * smargin)
-			.attr('height', sheight + 2 * smargin);
-
-		// Valid range and initial value.
-		console.log(dates[0] + ',' + dates[dates.length-1]);
-		var svalue = dates[0],
-			sdomain = [dates[0], dates[dates.length-1] + 1];
-
-		// Create and configure the slider control.
-		var slider = sliderControl()
-			.width(swidth)
-			.domain(sdomain);
-			
-			
-		slider.currentValue(svalue);
-			
-		// Set a simple callback for the slide event.	
-		slider.onSlide(function(selection) {
-			selection.each(function(d) {
-				slider.currentValue(d);
-				draw();
-			//	circle.attr('r', d);
-			});
-		});
-		
-		// Create a container for the slider and translate it
-		// to align it vertically.	
-		var gSlider = svg0.selectAll('g')
-			.data([svalue])
-			.enter()
-			.append('g')
-			.attr('transform', 'translate(' + [smargin, sheight / 2] + ')')
-			.call(slider);	
-
-			
-		console.log('0cv = ' + slider.currentValue());	
-			
-		
-		function draw() {
-			var cp = $("#type").val();
-			var sp = $("#outcome").val();
-			var pp = [];
-			$("input[name=pid]").each(function() {
-				//console.log(this.checked);
-				if(this.checked) {
-					pp.push($(this).val());
-				}	
-			});
-			//console.log("cp=" + cp + ",sp=" + sp+ ",pp=" + pp);
-			
-			var res = [];
-			
-		//	res.push({date:'2010.08',direct:0.72,indirect:1.91});
-		//	res.push({date:'2010.09',direct:1.20,indirect:0.50});
-		//	console.log("date=" + res[0].date + ",direct=" + res[0].direct + ",indirect=" + res[0].indirect);
-			
-			for(var i=0;i<pp.length;i++) {
-				var ar = axis_data[cp + ',' + sp + ',' + pp[i]];
-				var pos = -1;
-				for(var j=0;j<ar.length;j++) {
-					if(slider.currentValue() == ar[j].date) {
-						pos = j;
-						break;
-					} 
-				}
-				
-				if(pos > -1) {
-				   var res0 = [];
-				   for(var k=0;k<=pos;k++) {
-					  res0.push(ar[k]);
-					  console.log("date=" + ar[k].date + ",direct=" + ar[k].direct + ",indirect=" + ar[k].indirect);
-				   }
-				   res.push(res0);
-				}
-			}
-		
-			// Bind the chart to the container div
-
-			console.log('mx=' + chart.maxX() + ', my=' + chart.maxY());		
-			d3.select('div#chart01')
-				.datum(res)
-				.call(chart);
-		}
-			
-    });
-	
-	
-	
-	
-	
-
-</script>				
-				
-				
-				
-				
-				
-				
-				
+				</script>					
             </div>
-
             <!-- Blog Sidebar Widgets Column -->
-
-
         </div>
         <!-- /.row -->
 
@@ -783,7 +311,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>Copyright &copy; Your Website 2016</p>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -795,7 +323,6 @@
 
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 

@@ -1,0 +1,31 @@
+Installation
+=============================
+
+1. Install node.js
+---------------------------
+- Install the node.js into your system if not present. Download it from:  https://nodejs.org/en/
+- Afrer installation, open a command line and type:
+	node --version
+  This will give you the node's version and will confirm the successful installation.
+  
+2. Install http-seerver
+---------------------------
+- Open a command line and type:
+	npm install -g http-server
+	
+3. Run the demo
+---------------------------
+- Open a command line and move to the sample's root folder.
+- Type:  
+	http-server
+  This will present on the screen something like:
+	Starting up http-server, serving ./
+	Available on:
+	  http://127.0.0.1:8080   
+- At this point a sample http server proxies the static files of the demo, and you can visit the demo at:
+	localhost:8080
+  If you can't see the application make sure that you ran http server from inside the ROOT folder where static files are located.
+
+
+NOTE: the sample data file is located inside /data folder. You can use this file or another one but make sure that the name is the same and that the new file complies with the expected format.
+  
